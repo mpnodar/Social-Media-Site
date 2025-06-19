@@ -759,13 +759,15 @@ async function deleteLike(id, post_id) {
         
         async function setTrendingTab() {
             const posts = await getTopPosts();
+            console.log(posts)
             const trendingList = document.getElementById('trendingList'); // Get the parent container
-        
+            let trendingLimit = 5
             let trendingHTML = '';
-        
-            for (let i = 0; i < 6; i++) {
+            if (posts.length < 5) {
+                trendingLimit = posts.length
+            }
+            for (let i = 0; i < trendingLimit; i++) {
                 const post = posts[i];
-        
                 // Build the HTML string for each trending item
                 trendingHTML += `
                     <div class="trendingItem">

@@ -88,7 +88,7 @@ function uploadFile(event) {
 .then(data => {
     console.log('Post Created:', data);
     const postId = data.post.post_id;
-    addLike(postId, 48, 0);
+    addLike(postId, userId, 0);
 })
 .catch(error => {
     console.error('Error:', error);
