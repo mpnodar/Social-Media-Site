@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en" style="background-color: #444444;">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Account | Snapshot</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* Reset and basic styling */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    background-color: #444444;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.container {
+    width: 100%;
+    max-width: 500px;
+    padding: 20px;
+}
+
+.form-box {
+    background-color: #171717;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+h1 {
+    font-size: 24px;
+    color: #EDEDED;
+    margin-bottom: 20px;
+}
+
+.input-group {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+}
+
+.input-group input {
+    width: 48%;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #EDEDED;
+}
+
+input {
+    width: 100%;
+    padding: 12px;
+    font-size: 14px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #EDEDED;
+}
+
+input:focus {
+    border-color: #1877f2;
+    background-color: #fff;
+    outline: none;
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    background-color: #DA0037;
+    color: white;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-bottom: 10px;
+}
+
+button:hover {
+    background-color: #ed003b;
+}
+
+.login-redirect {
+    margin-top: 20px;
+    font-size: 14px;
+    color: #EDEDED;
+}
+
+.login-redirect a {
+    color: #DA0037;
+    text-decoration: none;
+}
+
+.login-redirect a:hover {
+    text-decoration: underline;
+}
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="form-box">
+            <h1>Create Account</h1>
+            <form id="createUserForm">
+                <div class="input-group">
+                    <input type="text" id="firstname" name="firstname" placeholder="First Name" required>
+                    <input type="text" id="lastname" name="lastname" placeholder="Last Name" required>
+                </div>
+                <input type="text" id="username" name="username" placeholder="Username" required>
+                <input type="email" id="email" name="email" placeholder="Email Address" required>
+                <input type="password" id="password" name="password" placeholder="Password" required>
+                <input type="tel" id="phone" name="phone" placeholder="Phone Number" pattern="[0-9]{10}">
+                <input type="date" id="date_of_birth" name="date_of_birth" required>
+                <button type="submit">Sign Up</button>
+            </form>
+
+            <p class="login-redirect">Already have an account? <a href="logIn.html">Log In</a></p>
+        </div>
+    </div>
+
+    <script src="js/profile.js"></script>
+    <script src="js/db.js"></script>
+</body>
+</html>

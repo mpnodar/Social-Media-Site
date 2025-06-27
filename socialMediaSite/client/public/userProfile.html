@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile | Snapshot</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <script src="https://sdk.amazonaws.com/js/aws-sdk-2.1187.0.min.js"></script>
+    <link rel="stylesheet" href="css/style.css">    
+    <link rel="stylesheet" href="css/profile.css">
+</head>
+<body>
+
+    <!-- Git Stuff Work -->
+
+<div class="profile-container">
+    <header class="profile-header">
+        <div class="profile-image-container">
+            <img id="profile-pic" class="profile-image" src="assets/Blank Profile Photo.png" alt="Profile Picture">
+        </div>
+        <div class="profile-details">
+            <h1 id="fullname"></h1>
+            <p id="username">@</p>
+            <div class="profile-stats">
+                <span id="posts-count">0</span> Posts | <span id="followerCount">0</span> | <span id="followingCount">0</span> Following
+            </div>
+            <a href="editProfile.html">
+                <button class="edit-btn">Edit Profile</button>
+            </a>
+        </div>
+    </header>
+
+    <section class="bio-section">
+        <p id="bio"></p>
+    </section>
+
+    <div class="tabs">
+        <button class="tab-button active" id="postsTab" data-tab="posts">Posts</button>
+        <button class="tab-button" id="savedTab" data-tab="saved">Saved</button>
+    </div>
+
+
+    <div id="feed"></div>
+
+</div>
+
+<script src="js/profile.js"></script>
+<script src="js/follows.js"></script>
+<script src="js/awsFunctions.js"></script>
+<script src="js/script.js"></script>
+<!-- <script src="js/posts.js"></script> -->
+
+</body>
+</html>

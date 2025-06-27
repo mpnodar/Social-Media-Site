@@ -1,0 +1,297 @@
+html, body {
+    margin: 0;
+    background-color: #555555;
+}
+
+.feed {
+    display: flex;
+    flex-direction: column;
+    width: 100vw;
+    height: 100vh;
+    justify-content: flex-start; /* Align items at the top */
+    align-items: center; /* Center horizontally */
+}
+
+/* Full Post Body */
+
+
+.postBody {
+    display: flex;
+    flex-direction: column;
+    width: 80%;
+    height: auto;
+    justify-content: center;
+    align-items: center;
+    background-color: #EDEDED;  /* Set to black */
+    border-radius: 5px;
+    margin: 20px;
+    margin-right: auto;
+    margin-left: auto;
+    padding: 30px;
+    padding-bottom: 10px;
+    padding-top: 10px;
+}
+
+.postBody p {
+    margin-top: 0;
+    margin-right: auto;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-weight: 500;
+    color: #171717;
+}
+
+/* Link to Profile */
+
+.profile-link-post {
+    margin-top: 15px;
+    display: flex;
+    flex-direction: row;
+    height: 80px;
+    width: 80%;
+    align-items: start;
+    margin-right: 15%;
+    margin-bottom: 0px;
+    cursor: pointer;
+    transition: 0.05s ease;
+    padding: 0px;
+}
+
+.profilePhoto {
+    height: 50px;
+    width: 50px;
+    object-fit:fill;
+}
+
+.profile-link-post img {
+    width: 50px;
+    border-radius: 50px;
+    border: 1px solid grey;
+    margin-top: 0px;
+    top: 0px;
+}
+
+.profile-link-name {
+    margin-left: 10px;
+    margin-bottom: auto;
+}
+
+.profile-link-name p {
+    color: #EDEDED;
+    font-size: larger;
+    margin-bottom: 3px;
+    font-weight: bold;
+}
+
+.profile-link-name p2 {
+    color: #EDEDED;
+    margin: 0px;
+}
+
+
+/* Post Image and Caption */
+
+#caption {
+    margin-top: 15px;
+}
+
+
+.postPhoto {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    max-height: 70%;
+    border: solid 1px lightgrey;
+    border-radius: 8px;
+}
+
+
+/* Post Action Bar for Liking, Commenting and Messaging*/
+
+
+.post-action-bar {
+    display: flex;
+    flex-direction: row;
+    height: fit-content;
+    width: 100%;
+    justify-content: center;
+    padding: 0;
+}
+
+.post-action-list {
+    display: flex;
+    flex-direction: row;
+    list-style-type: none;
+    margin-left: 20px;
+    margin-right: 20px;
+    margin-top: 10px;
+    justify-content: center;
+    padding: 0;
+    width: 100%;
+}
+
+.post-action-list li {
+    margin-right: 40px;
+    margin-left: 40px;
+}
+
+.post-action-list i {
+    font-size: 30px;
+    color: rgb(72, 72, 72);
+}
+
+.post-action-list i:hover {
+    cursor: pointer;
+    color: #DA0037;
+}
+
+.post-action-item {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    color: grey;
+}
+.post-action-item i {
+    margin-right: 10px;
+}
+
+
+/* Entire Comment section */
+
+.commentSection {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 30px;
+    transition: 0.1s ease;
+}
+
+#commentSectionHeader {
+    display: flex;
+    color: #171717;
+    font-size: 23px;
+    font-weight: 500;
+    margin-left: 30px;
+    margin-right: 60%;
+    margin-bottom: 10px;
+    margin-top: 0px;
+}
+
+/* Entire Comment input box */
+
+#commentBox {
+    width: 100%;
+    height: 70px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    background-color: #e4e4e4;
+
+}
+
+/* Textbox Itself */
+
+#commentInput {
+    display: flex;
+    height: 50px;
+    width: 70%;
+    padding-left: 10px;
+    margin-left: auto;
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+    border: none;
+    resize: none;
+}
+
+/* Button to Post */
+
+.commentButton {
+    padding-left: 20px;
+    padding-right: 20px;
+    margin-left: 0px;
+    margin-right: auto;
+    border-bottom-right-radius: 20px;
+    border-top-right-radius: 20px;
+    border: 1px solid white;
+    border-left: 1px solid rgb(234, 234, 234);
+    background-color: white;
+    cursor: pointer;
+    height: 50px;
+    font-weight: bold;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+#commentButton:hover {
+    background-color: rgb(247, 247, 247);
+    border: 1px solid rgb(235, 235, 235);
+    border-left: 1px solid rgb(234, 234, 234);
+}
+
+/* Posted comment */
+
+.comment {
+    padding-left: 40px;
+    padding-top: 10px;
+    margin-bottom: 0px;
+    margin-top: 5px;
+}
+
+.profile-pic {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.comment-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.comment-author {
+    color: #171717;
+    font-weight: bold;
+}
+
+.comment-body p {
+    margin-top: 5px;
+}
+
+
+/* Follow Button */
+
+
+.followButton {
+    scale: 0.7;
+    margin-left: 0px;
+    margin-bottom: auto;
+    display: inline-flex;  /* Change to inline-flex for better alignment */
+    justify-content: center;
+    font-family:Verdana, Geneva, Tahoma, sans-serif;
+    align-items: center;
+    text-align: center;
+    border-radius: 8px;
+    border: none;
+    color: #EDEDED;
+    font-weight: bold;
+    background: linear-gradient(145deg, #ff002b, #b5002e);  /* Gradient background */
+    padding: 10px 20px;  /* Adjust padding for a more prominent 3D feel */
+    top: 0;
+    transition: all 0.2s ease;
+    text-shadow: 1px 1px 2px #171717;  /* Text shadow for depth */
+    box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.2), -2px -2px 4px rgba(255, 255, 255, 0.3);
+    cursor: pointer;
+}
+
+/* Hover Effect: make it look like it's being pressed */
+.followButton:hover {
+    background: linear-gradient(145deg, #c10020, #7a001e);  /* Slightly lighter gradient */
+    box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.3), -2px -2px 4px rgba(255, 255, 255, 0.4);  /* Inward shadow to simulate pressing */
+    transform: scale(1.03);  /* Button moves down a little to simulate "press" */
+}
+
+/* Active State: Button "pressed" look */
+.followButton:active {
+    box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.4);  /* Inset shadow for pressed effect */
+    transform: scale(1);
+}

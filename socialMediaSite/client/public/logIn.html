@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Login | Snapshot</title>
+    <link rel="stylesheet" href="css/login.css">
+</head>
+<body>
+
+    <div id="signUpBox">
+        <form id="loginForm" action="#" method="POST">
+
+            <!-- Heading -->
+            <h2>Welcome Back</h2>
+            <p>Please login to continue.</p>
+
+            <!-- Username Input -->
+            <div class="input-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" placeholder="Enter your username" required>
+            </div>
+
+            <!-- Password Input -->
+            <div class="input-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" placeholder="Enter your password" required>
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" id="loginButton">Log In</button>
+
+            <div class="form-footer">
+                <p><a href="#">Forgot Password?</a></p>
+            </div>
+        </form>
+
+        <!-- Sign-Up Prompt -->
+        <div class="signup-link">
+            <p>Don't have an account? <a href="signUp.html">Create Account</a></p>
+        </div>
+    </div>
+
+    <script src="js/db.js"></script>
+</body>
+</html>

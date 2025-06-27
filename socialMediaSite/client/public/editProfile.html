@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings Page | Snapshot</title>
+    <link rel="stylesheet" href="css/settings.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Settings</h1>
+        </header>
+        <main>
+            <section class="settings-section">
+                <h2>Account Settings</h2>
+                <div class="setting-item">
+                    <label for="name">Name</label>
+                    <span id="name-display"></span>
+                    <span id = "name-input" style="display: none;">
+                        <input type="text" id="firstname-input" style="display:block;margin-bottom: 5px;" placeholder="First Name">
+                        <input type="text" id="lastname-input" style="display:block;" placeholder="Last Name">
+                    </span>
+                    <button id="edit-name-button">Edit</button>
+                </div>              
+                <div class="setting-item">
+                    <label for="username">Username</label>
+                    <span id="username-display"></span>
+                    <input type="text" id="username-input" style="display:none;">
+                    <button id="edit-username-button">Edit</button>
+                </div>
+                
+                <div class="setting-item">
+                    <label for="email">Email</label>
+                    <span id="email-display"></span>
+                    <input type="text" id="email-input" value="YourEmail" style="display:none;">
+                    <button id="edit-email-button">Edit</button>
+                </div>
+
+                <div class="setting-item">
+                    <label for="phone">Phone Number</label>
+                    <span id="phone">444-333-2222</span>
+                    <button>Change</button>
+                </div>
+                <div class="setting-item">
+                    <label for="password">Password</label>
+                    <button onclick="changePassword()">Change Password</button>
+                </div>
+            </section>
+
+            <section class="settings-section">
+                <h2>Privacy Settings</h2>
+                <div class="setting-item">
+                    <label for="profile-visibility">Profile Visibility</label>
+                    <span id="profile-visibility">Public</span>
+                    <button onclick="editProfileVisibility()">Change</button>
+                </div>
+                <div class="setting-item">
+                    <label for="friend-requests">Who Can Send Friend Requests</label>
+                    <span id="friend-requests">Anyone</span>
+                    <button onclick="editFriendRequests()">Change</button>
+                </div>
+            </section>
+
+            <section class="settings-section">
+                <h2>Notification Settings</h2>
+                <div class="setting-item">
+                    <label for="email-notifications">Email Notifications</label>
+                    <input type="checkbox" id="email-notifications" checked>
+                    <span>Receive email alerts</span>
+                </div>
+                <div class="setting-item">
+                    <label for="push-notifications">Push Notifications</label>
+                    <input type="checkbox" id="push-notifications" checked>
+                    <span>Receive push alerts</span>
+                </div>
+            </section>
+
+            <section class="settings-section">
+                <h2>Security Settings</h2>
+                <div class="setting-item">
+                    <label for="two-factor">Two-Factor Authentication</label>
+                    <input type="checkbox" id="two-factor" onchange="toggleTwoFactor()">
+                    <span>Enable 2FA</span>
+                </div>
+                <div class="setting-item">
+                    <button onclick="viewLoginActivity()">View Login Activity</button>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="js/settings.js"></script>
+    <script src="js/db.js"></script>
+
+
+</body>
+</html>
