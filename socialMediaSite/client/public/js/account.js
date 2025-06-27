@@ -51,7 +51,7 @@ const logOut = document.getElementById("logOutButton");
 
 logOut.onclick = function () {
     localStorage.clear();
-    window.location.href = "http://127.0.0.1:5502/client/public/logIn.html";
+    window.location.href = "/client/public/logIn.html";
 
 }
 
