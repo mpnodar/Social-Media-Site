@@ -7,7 +7,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { error } = require('console');
 require('dotenv').config();
-const port = process.env.PORT;
+const port = process.env.PORT || 3000;
 const dbPassword = process.env.PGPASSWORD;
 const dbName = process.env.PGDATABASE;
 const dbHost = process.env.PGHOST;

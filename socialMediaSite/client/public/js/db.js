@@ -34,7 +34,7 @@ createUserForm.addEventListener('submit', function (e) {
     .then(data => {
         console.log('User Created:', data);
         alert('Account Created Successfully!');
-        window.location.href = 'http://127.0.0.1:5501/client/public/logIn.html';
+        window.location.href = 'http://127.0.0.1:5502/client/public/logIn.html';
     })
     
     .catch(error => {
@@ -87,7 +87,7 @@ loginForm.addEventListener('submit', function (e) {
             // localStorage.setItem('location', user.location);
             localStorage.setItem('email', user.email);
             localStorage.setItem('fullname', user.firstname + " " + user.lastname);
-            window.location.href = 'http://127.0.0.1:5501/client/public/index.html';
+            window.location.href = 'http://127.0.0.1:5502/client/public/index.html';
             // console.log('Login Successful:', data.user);
             alert('Login Successful!');
         } else {
