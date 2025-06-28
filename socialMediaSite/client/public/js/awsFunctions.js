@@ -73,7 +73,7 @@ function uploadFile(event) {
 
   const postData = {
       id: id,
-      image_url:  process.env.S3_BASE_URL + fileName,
+      image_url:  `https://aws-test-nodar.s3.us-east-1.amazonaws.com/'${fileName}`,
       caption: caption_
   };
   console.log("Post Data Being Sent:", postData);  // Debugging step
