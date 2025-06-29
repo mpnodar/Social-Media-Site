@@ -1048,8 +1048,8 @@ padding-top: 20px;
 .postSubMenuOptionContent i {
     color: grey;
     height: fit-content;
-    width: fit-content;
-    margin-left: 0px;
+    width: 18px;
+    text-align: center;    
 }
 
 .postSubMenuOptionContent p {

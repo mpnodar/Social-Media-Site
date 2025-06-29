@@ -439,21 +439,21 @@ async function displayPost(imageUrl) {
 
             <div class = "postSubMenu">
                 <div class = "postSubMenuOption">
-                    <div class = "postSubMenuOptionContent">
+                    <div class = "postSubMenuOptionContent savePostButton" data-post-id="${postId}" data-user-id="${userId}">
                         <i class="fa-solid fa-bookmark"></i>
                         <p> Save Post </p>
                     </div>  
                 </div>
                 <div class = "postSubMenuOption">
                     <div class = "postSubMenuOptionContent">
-                        <i class="fa-solid fa-trash-can"></i>
-                        <p> Save Post </p>
+                        <i class="fa-solid fa-eye-slash"></i>
+                        <p> Hide Post </p>
                     </div>  
                 </div>
                 <div class = "postSubMenuOption" style = "border-bottom: none;">
                     <div class = "postSubMenuOptionContent">
-                        <i class="fa-solid fa-trash-can"></i>
-                        <p> Save Post </p>
+                        <i class="fa-solid fa-flag"></i>
+                        <p> Report Post </p>
                     </div>  
                 </div>
                 
@@ -467,12 +467,12 @@ async function displayPost(imageUrl) {
                     </div>    
                 </div>
                 <div class = "postSubMenuOption">
-                    <div class = "postSubMenuOptionContent">
+                    <div class = "postSubMenuOptionContent savePostButton" data-post-id="${postId}" data-user-id="${userId}">
                         <i class="fa-solid fa-bookmark"></i>
                         <p> Save Post </p>
-                    </div>    
+                    </div>  
                 </div>
-                <div class = "postSubMenuOption" style = "border-bottom: none;">
+                <div class = "postSubMenuOption deletePostButton" data-post-id="${postId}" style = "border-bottom: none;">
                     <div class = "postSubMenuOptionContent">
                         <i class="fa-solid fa-trash-can"></i>
                         <p> Delete Post </p>
@@ -555,7 +555,74 @@ document.addEventListener("click", function (event) {
 });
 
 
-    
+    // Save Post Function
+    const saveButtons = postDiv.querySelectorAll('.savePostButton');
+
+    saveButtons.forEach((button) => {
+        button.onclick = async function () {
+            const postId = button.getAttribute('data-post-id');
+            const userId = button.getAttribute('data-user-id');
+
+            try {
+                const response = await fetch('http://localhost:3000/api/v1/savePost', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        post_id: postId,
+                        user_id: userId
+                    })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    console.log('Post saved successfully:', data.post);
+                    alert('Post saved!');
+                } else {
+                    console.warn('Failed to save post:', data.message);
+                    alert(data.message);
+                }
+            } catch (err) {
+                console.error('Error saving post:', err);
+                alert('Something went wrong while saving the post.');
+            }
+        };
+    });
+
+
+
+
+    // Delete Post Function
+    const deleteButton = postDiv.querySelector('.deletePostButton');
+
+    deleteButton.onclick = async function () {
+    const postId = deleteButton.getAttribute('data-post-id');
+
+    const confirmDelete = confirm("Are you sure you want to delete this post?");
+    if (!confirmDelete) return;
+
+    try {
+        const response = await fetch(`http://localhost:3000/api/v1/deletePost/${postId}`, {
+            method: 'DELETE',
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+            postDiv.remove(); // Remove the post from the DOM
+            console.log('Post deleted successfully.');
+        } else {
+            console.error('Delete failed:', data.message);
+            alert("Failed to delete post.");
+        }
+    } catch (err) {
+        console.error('Error deleting post:', err);
+        alert("An error occurred while deleting the post.");
+    }
+};
+
 
 
 
@@ -748,6 +815,12 @@ document.addEventListener("click", function (event) {
     showComments()
     }
 }
+
+
+
+// Delete Post Function
+
+
 
 
 // Add Like

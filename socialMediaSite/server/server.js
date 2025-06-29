@@ -446,6 +446,79 @@ app.post('/api/v1/createPost', async (req, res) => {
 });
 
 
+// Save Post
+
+app.post('/api/v1/savePost', async (req, res) => {
+    const {user_id, post_id} = req.body;
+
+    const query = `INSERT INTO saved_posts (post_id, user_id) VALUES ($1, $2) RETURNING *`;
+
+    try {
+        const result = await pool.query(query, [
+            post_id, user_id
+        ]);
+        res.status(201).json({
+            status: 'success',
+            post: result.rows[0],
+        });
+    } catch (error) {
+        if (error.code === '23505') { // PostgreSQL duplicate key error
+            return res.status(409).json({
+                status: 'error',
+                message: 'Post already saved by this user.',
+            });
+        }
+        console.error('Error saving post:', error);
+        res.status(500).json({
+            status: 'error',
+            message: 'Error saving post.',
+        });
+    }
+})
+
+
+
+
+// Delete Post
+
+app.delete('/api/v1/deletePost/:post_id', async (req, res) => {
+    const postId = req.params.post_id;
+
+    const query = `
+        DELETE FROM posts
+        WHERE post_id = $1
+        RETURNING *;
+    `;
+
+    try {
+        const result = await pool.query(query, [postId]);
+
+        if (result.rowCount === 0) {
+            return res.status(404).json({
+                status: 'error',
+                message: 'Post not found.',
+            });
+        }
+
+        res.status(200).json({
+            status: 'success',
+            message: 'Post deleted successfully.',
+            deletedPost: result.rows[0],
+        });
+    } catch (error) {
+        console.error('Error deleting post:', error);
+        res.status(500).json({
+            status: 'error',
+            message: 'Error deleting post.',
+        });
+    }
+});
+
+
+
+
+
+
 // Create Comment
 
 app.post('/api/v1/createComment', async (req, res) => {
