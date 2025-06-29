@@ -355,6 +355,22 @@ async function getCommentUserId(post_id, index) {
     return user_id;
 }
 
+async function getCommentId(post_id, index) {
+    try {
+        const response = await fetch(`http://localhost:3000/api/v1/comments/${post_id}`);
+        const comments = await response.json();
+
+        if (index >= 0 && index < comments.length) {
+            return comments[index].comment_id;
+        } else {
+            throw new Error('Index out of bounds');
+        }
+    } catch (err) {
+        console.error('Error getting comment ID:', err);
+        return null;
+    }
+}
+
 
 
 
@@ -511,7 +527,9 @@ async function displayPost(imageUrl) {
                     <textarea id="commentInput" placeholder="Add a comment..."></textarea>
                     <button id="commentButton" class="commentButton">Post</button>
                 </div>
-                <div class="comments"></div>
+                <div class="comments">
+                
+                </div>
             </div>
 
             </div>
@@ -718,6 +736,7 @@ document.addEventListener("click", function (event) {
         commentSection.style.display = commentSection.style.display === "block" ? "none" : "block";
     });
 
+let currentlyOpenMenu = null; // Shared across all comments
 
 
     async function showComments() {
@@ -727,6 +746,7 @@ document.addEventListener("click", function (event) {
             
             const comment = comments[i];
             const posterId = await getCommentUserId(postId, i);
+            const commentId = await getCommentId(postId, i);
             const firstname = await fetchUserInfo(posterId, 0);
             const lastname = await fetchUserInfo(posterId, 1);
             const username = await fetchUserInfo(posterId, 2);
@@ -741,25 +761,135 @@ document.addEventListener("click", function (event) {
     
                 newComment.innerHTML = `
                     <div class="comment-header">
+                        
+                    
+                        <div class = "openCommentOptionsButton">
+                            <i class="fa-solid fa-ellipsis-vertical"></i>
+                        </div>
+
+                        <div class = "commentSubMenu">
+                            <div class = "commentSubMenuOption">
+                                <div class = "commentSubMenuOptionContent">
+                                    <i class="fa-solid fa-eye-slash"></i>
+                                    <p> Hide Comment </p>
+                                </div>  
+                            </div>
+                            <div class = "commentSubMenuOption" style = "border-bottom: none;">
+                                <div class = "commentSubMenuOptionContent">
+                                    <i class="fa-solid fa-flag"></i>
+                                    <p> Report Comment </p>
+                                </div>  
+                            </div>
+                        </div>
+
+                        <div class = "userCommentSubMenu">
+                            <div class = "commentSubMenuOption editCommentButton">
+                                <div class = "commentSubMenuOptionContent">
+                                    <i class="fa-solid fa-eye-slash"></i>
+                                    <p> Edit Comment </p>
+                                </div>  
+                            </div>
+                            <div class = "commentSubMenuOption deleteCommentButton" style = "border-bottom: none;">
+                                <div class = "commentSubMenuOptionContent">
+                                    <i class="fa-solid fa-flag"></i>
+                                    <p> Delete Comment </p>
+                                </div>  
+                            </div>
+                        </div>
+
+
                         <img class="profile-pic" src="assets/Blank Profile Photo.png" alt="Profile Picture">
                         <div class="comment-info">
+                        
                             <span class="comment-author">${fullname}</span>
                             <span style = "color: grey;">@${username}</span>
                         </div>
                     </div>
                     <div class="comment-body" style = "border-bottom: solid lightgrey 1px;margin-right: 40px;padding-bottom: 0px;">
+
                         <p style="margin-left: 50px;">${commentText}</p>
                     </div>
                 `;
     
                 // Append the new comment to the comment section
                 commentSection.appendChild(newComment);
+
+                // After appending newComment and submenu setup...
+
+        const deleteButton = newComment.querySelector(".deleteCommentButton");
+        if (deleteButton) {
+            deleteButton.onclick = async function () {
+                const confirmDelete = confirm("Are you sure you want to delete this comment?");
+                if (!confirmDelete) return;
+
+                try {
+                    const response = await fetch(`http://localhost:3000/api/v1/deleteComment/${commentId}`, {
+                        method: 'DELETE'
+                    });
+
+                    const result = await response.json();
+
+                    if (response.ok) {
+                        newComment.remove(); // remove the comment from DOM
+                        commentCounter.textContent = parseInt(commentCounter.textContent) - 1;
+                        // alert('Comment deleted.');
+                    } else {
+                        console.warn('Failed to delete comment:', result.message);
+                        alert(result.message);
+                    }
+                } catch (err) {
+                    console.error('Error deleting comment:', err);
+                    alert('Something went wrong while deleting the comment.');
+                }
+            };
+        }
+
     
                 // Update the comment counter
                 let currentCount = parseInt(commentCounter.textContent);
                 commentCounter.textContent = currentCount + 1;
+
+                
+
+        // Open Comment Sub-Menu
+        const commentSubMenuButton = newComment.querySelector(".openCommentOptionsButton");
+        const commentSubMenu = newComment.querySelector(".commentSubMenu");
+        const userCommentSubMenu = newComment.querySelector(".userCommentSubMenu");
+        const isOwner = parseInt(posterId) === parseInt(userId);
+        const activeCommentSubMenu = isOwner ? userCommentSubMenu : commentSubMenu;
+        // Toggle menu on button click
+        commentSubMenuButton.onclick = function (event) {
+        event.stopPropagation();
+        // Close previously open menu if it's not the one about to open
+        if (currentlyOpenMenu && currentlyOpenMenu !== activeCommentSubMenu) {
+            currentlyOpenMenu.style.display = 'none';
+        }
+        // Toggle current menu
+        if (activeCommentSubMenu.style.display === 'flex') {
+            activeCommentSubMenu.style.display = 'none';
+            currentlyOpenMenu = null;
+        } else {
+            activeCommentSubMenu.style.display = 'flex';
+            currentlyOpenMenu = activeCommentSubMenu;
+            }
+        };
+            document.addEventListener("click", function (event) {
+                const clickedInsideMenu = activeCommentSubMenu.contains(event.target);
+                const clickedButton = commentSubMenuButton.contains(event.target);
+
+                if (!clickedInsideMenu && !clickedButton && currentlyOpenMenu) {
+                    currentlyOpenMenu.style.display = 'none';
+                    currentlyOpenMenu = null;
+                }
+            });
             }
         }
+
+        // const deleteCommentButton = document.querySelector("deleteCommentButton");
+        // const editCommentButton = document.querySelector("editCommentButton");
+
+
+
     }
 
     

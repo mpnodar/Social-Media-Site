@@ -157,6 +157,50 @@ app.get('/api/v1/getComments/:post_id', async (req, res) => {
 });
 
 
+// Example backend route (Node.js + Express + PostgreSQL)
+app.get('/api/v1/comments/:post_id', async (req, res) => {
+    const { post_id } = req.params;
+
+    try {
+        const result = await pool.query(
+            'SELECT comment_id FROM comments WHERE post_id = $1 ORDER BY comment_id',
+            [post_id]
+        );
+        res.json(result.rows); // [{ comment_id: 1 }, { comment_id: 2 }, ...]
+    } catch (err) {
+        console.error('Error fetching comments:', err);
+        res.status(500).json({ error: 'Failed to fetch comments' });
+    }
+});
+
+
+
+
+// Delete Comment Function
+
+
+// DELETE comment by ID
+app.delete('/api/v1/deleteComment/:comment_id', async (req, res) => {
+    const { comment_id } = req.params;
+
+    const query = `DELETE FROM comments WHERE comment_id = $1 RETURNING *`;
+
+    try {
+        const result = await pool.query(query, [comment_id]);
+
+        if (result.rowCount === 0) {
+            return res.status(404).json({ status: 'error', message: 'Comment not found.' });
+        }
+
+        res.status(200).json({ status: 'success', deletedComment: result.rows[0] });
+    } catch (err) {
+        console.error('Error deleting comment:', err);
+        res.status(500).json({ status: 'error', message: 'Error deleting comment.' });
+    }
+});
+
+
+
 
 
 // Get post info
