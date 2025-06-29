@@ -21,6 +21,7 @@ async function getPostData() {
     const response = await fetch('http://localhost:3000/api/v1/getPost')
     const data = await response.json();
     const post = data.post;
+    console.log(post)
     const id = data.id;
     return post;
 }
@@ -715,8 +716,23 @@ document.addEventListener("click", function (event) {
             likeIcon.style.color = '';
         } else {
             // Not liked yet, so like it
-            await addLike(postId, userId, 1);  // Increase the like count            
+            await addLike(postId, userId, 1);  // Increase the like count
             currentLikes = await getLikes(postId);
+
+            // Get id of user who created the post being liked (for notification functionality)
+            const posterInfo = await getUserFromPost(postId);
+                const posterId = await posterInfo.id;
+            console.log("My ID: ", userId)
+            console.log("Poster's ID: ", posterId)
+            if (parseInt(userId) !== parseInt(posterId)) {
+                await createNotification({
+                    userId: posterId,         // who receives the notification
+                    triggeredById: userId,    // who triggered it
+                    type: "like",
+                    postId: postId
+                });
+            }
+
             likeIcon.classList.add("fa-solid");
             likeIcon.classList.remove("fa-regular");
             likeCounter.textContent = currentLikes;
@@ -785,13 +801,13 @@ let currentlyOpenMenu = null; // Shared across all comments
                         <div class = "userCommentSubMenu">
                             <div class = "commentSubMenuOption editCommentButton">
                                 <div class = "commentSubMenuOptionContent">
-                                    <i class="fa-solid fa-eye-slash"></i>
+                                    <i class="fa-solid fa-pencil"></i>
                                     <p> Edit Comment </p>
                                 </div>  
                             </div>
                             <div class = "commentSubMenuOption deleteCommentButton" style = "border-bottom: none;">
                                 <div class = "commentSubMenuOptionContent">
-                                    <i class="fa-solid fa-flag"></i>
+                                    <i class="fa-solid fa-trash-can"></i>
                                     <p> Delete Comment </p>
                                 </div>  
                             </div>
@@ -978,6 +994,7 @@ async function addLike(post_id, user_id, likecount) {
 
         if (response.ok) {
             console.log('Like added/updated:', result);
+            // createNotification();
             // You can update the UI here if necessary, such as updating the like count
             // updateLikeUI(post_id, result.like.likecount);  // Example of updating the UI
         } else {
@@ -1074,6 +1091,64 @@ async function deleteLike(id, post_id) {
             trendingList.innerHTML = trendingHTML;
         }
         
+        async function getUserFromPost(postId) {
+            try {
+                const response = await fetch(`http://localhost:3000/api/v1/getUserIdFromPost/${postId}`);
+                
+                if (!response.ok) {
+                    throw new Error('Failed to fetch user info from post.');
+                }
+
+                const data = await response.json();
+                return {
+                    id: data.post.id,
+                    firstname: data.post.firstname,
+                    lastname: data.post.lastname,
+                    username: data.post.username,
+                    imageUrl: data.post.image_url
+                };
+            } catch (error) {
+                console.error('Error in getUserFromPost:', error);
+                return null;
+            }
+        }
+
+
+        async function createNotification({
+            userId,            // who receives it
+            triggeredById,     // who caused it
+            type,              // 'like', 'comment', 'follow', etc.
+            postId = null,
+            commentId = null,
+            messageId = null
+        }) {
+            try {
+                const response = await fetch('http://localhost:3000/api/v1/createNotification', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        user_id: userId,
+                        triggered_by_id: triggeredById,
+                        notification_type: type,
+                        post_id: postId,
+                        comment_id: commentId,
+                        message_id: messageId
+                    }),
+                });
+
+                const data = await response.json();
+                if (response.ok) {
+                } else {
+                    console.warn('Failed to create notification:', data.message);
+                }
+            } catch (err) {
+                console.error('Error creating notification:', err);
+            }
+        }
+
+
 
 
 setTrendingTab();

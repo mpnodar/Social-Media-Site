@@ -25,7 +25,7 @@ header h1 {
     margin-bottom: 20px;
 }
 
-.settings-section {
+.settings-section, .notifications-section {
     margin-bottom: 30px;
 }
 
@@ -59,7 +59,7 @@ button {
 }
 
 button:hover {
-    background-color: #45a049;
+    background-color:#b0002c;
 }
 
 input[type="checkbox"] {

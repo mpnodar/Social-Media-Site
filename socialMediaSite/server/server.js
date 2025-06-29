@@ -207,7 +207,7 @@ app.delete('/api/v1/deleteComment/:comment_id', async (req, res) => {
 
 app.get('/api/v1/getPost', async (req, res) => {
     try {
-        const result = await pool.query(`SELECT post_id, image_url, likes, caption FROM posts`); // Fetch one post
+        const result = await pool.query(`SELECT id, post_id, image_url, likes, caption FROM posts`); // Fetch one post
         const postId = await pool.query(`SELECT post_id FROM posts`);
         const post = result.rows;
         const id = postId.rows;
@@ -231,25 +231,25 @@ app.get('/api/v1/getPost', async (req, res) => {
 
 // Get All Posts from Specific User (Don't delete!)
 
-app.get('/api/v1/getUserPost/:id', async (req, res) => {
-    const { id } = req.params;
-    const { column } = req.query;  // Get the column name from query params (e.g. ?column=image_url)
+// app.get('/api/v1/getUserPost/:id', async (req, res) => {
+//     const { id } = req.params;
+//     const { column } = req.query;  // Get the column name from query params (e.g. ?column=image_url)
 
 
-    try {
-        const result = await pool.query(`SELECT ${column} FROM posts WHERE id = $1`, [id]); // Use dynamic column name
-        const post = result.rows;  // Query results
+//     try {
+//         const result = await pool.query(`SELECT ${column} FROM posts WHERE id = $1`, [id]); // Use dynamic column name
+//         const post = result.rows;  // Query results
 
-        if (post.length === 0) {
-            return res.status(404).json({ message: 'No posts found.' });
-        }
+//         if (post.length === 0) {
+//             return res.status(404).json({ message: 'No posts found.' });
+//         }
 
-        res.status(200).json({ post: post }); // Send the post data
-    } catch (error) {
-        console.error('Error fetching post:', error);
-        res.status(500).json({ message: 'Error fetching post.' });
-    }
-});
+//         res.status(200).json({ post: post }); // Send the post data
+//     } catch (error) {
+//         console.error('Error fetching post:', error);
+//         res.status(500).json({ message: 'Error fetching post.' });
+//     }
+// });
 
 
 
@@ -276,28 +276,30 @@ app.get('/api/v1/getUserPost/:id', async (req, res) => {
 
 
 // Get user info from post
-
 app.get('/api/v1/getUserIdFromPost/:id', async (req, res) => {
     const { id } = req.params;
-    const { column } = req.query;  // Get the column name from query params (e.g. ?column=image_url)
-
 
     try {
-        const result = await pool.query(`select image_url, firstname, lastname, username from (select distinct * FROM posts join users on posts.id = users.id)`, [id]); // Use dynamic column name
-        
+        const query = `
+            SELECT users.id, image_url, firstname, lastname, username
+            FROM posts
+            JOIN users ON posts.id = users.id
+            WHERE posts.post_id = $1
+        `;
+
+        const result = await pool.query(query, [id]);
         const post = result.rows;
 
         if (post.length === 0) {
             return res.status(404).json({ message: 'No posts found.' });
         }
 
-        res.status(200).json({ post: post }); // Send the post data
+        res.status(200).json({ post: post[0] }); // return single row
     } catch (error) {
         console.error('Error fetching post:', error);
         res.status(500).json({ message: 'Error fetching post.' });
     }
 });
-
 
 
 
@@ -802,6 +804,93 @@ app.get('/api/v1/getTopPosts', async (req, res) => {
         res.status(500).json({ error: 'Internal Server Error' });
     }
 });
+
+
+
+
+// Create notification
+app.post('/api/v1/createNotification', async (req, res) => {
+    const {
+        user_id,
+        triggered_by_id,
+        notification_type,
+        post_id,
+        comment_id,
+        message_id
+    } = req.body;
+
+    try {
+        // Check for existing notification
+        const checkQuery = `
+            SELECT * FROM notifications
+            WHERE user_id = $1
+              AND triggered_by_id = $2
+              AND notification_type = $3
+              AND post_id IS NOT DISTINCT FROM $4
+              AND comment_id IS NOT DISTINCT FROM $5
+              AND message_id IS NOT DISTINCT FROM $6
+            LIMIT 1;
+        `;
+
+        const checkResult = await pool.query(checkQuery, [
+            user_id,
+            triggered_by_id,
+            notification_type,
+            post_id,
+            comment_id,
+            message_id
+        ]);
+
+        if (checkResult.rows.length > 0) {
+            return res.status(200).json({ message: 'Notification already exists.' });
+        }
+
+        // Insert if no duplicate
+        const insertQuery = `
+            INSERT INTO notifications (user_id, triggered_by_id, notification_type, post_id, comment_id, message_id)
+            VALUES ($1, $2, $3, $4, $5, $6)
+            RETURNING *;
+        `;
+
+        const insertResult = await pool.query(insertQuery, [
+            user_id,
+            triggered_by_id,
+            notification_type,
+            post_id,
+            comment_id,
+            message_id
+        ]);
+
+        res.status(201).json({ notification: insertResult.rows[0] });
+
+    } catch (error) {
+        console.error('Error creating notification:', error);
+        res.status(500).json({ message: 'Error creating notification' });
+    }
+});
+
+
+// Fetch Notifications for Specific User
+
+app.get('/api/v1/getNotifications/:userId', async(req, res) => {
+
+    const { userId } = req.params;
+
+    try{
+        const query = 'SELECT * FROM NOTIFICATIONS WHERE user_id = $1 ORDER BY created_at DESC';
+        const notificationData = await pool.query(query, [userId]);
+        if (notificationData.rows.length === 0) {
+            console.log("No notifications for this user");
+            return;
+        }
+        return res.status(200).json({ notifications: notificationData.rows });
+    } 
+    catch (error) {
+        console.error("Error getting notifications:", error);
+        return res.status(500).json({ message: 'Server error while fetching notifications.' })
+    }
+})
+
 
 
 
