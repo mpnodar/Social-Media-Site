@@ -433,6 +433,55 @@ async function displayPost(imageUrl) {
                 <button class = "followButton">Follow</button>
             </div>
 
+            <div class = "openOptionsButton">
+                <i class="fa-solid fa-ellipsis-vertical"></i>
+            </div>
+
+            <div class = "postSubMenu">
+                <div class = "postSubMenuOption">
+                    <div class = "postSubMenuOptionContent">
+                        <i class="fa-solid fa-bookmark"></i>
+                        <p> Save Post </p>
+                    </div>  
+                </div>
+                <div class = "postSubMenuOption">
+                    <div class = "postSubMenuOptionContent">
+                        <i class="fa-solid fa-trash-can"></i>
+                        <p> Save Post </p>
+                    </div>  
+                </div>
+                <div class = "postSubMenuOption" style = "border-bottom: none;">
+                    <div class = "postSubMenuOptionContent">
+                        <i class="fa-solid fa-trash-can"></i>
+                        <p> Save Post </p>
+                    </div>  
+                </div>
+                
+            </div>
+
+            <div class = "userPostSubMenu">
+                <div class = "postSubMenuOption">
+                    <div class = "postSubMenuOptionContent">
+                        <i class="fa-solid fa-pencil"></i>
+                        <p> Edit Post </p>
+                    </div>    
+                </div>
+                <div class = "postSubMenuOption">
+                    <div class = "postSubMenuOptionContent">
+                        <i class="fa-solid fa-bookmark"></i>
+                        <p> Save Post </p>
+                    </div>    
+                </div>
+                <div class = "postSubMenuOption" style = "border-bottom: none;">
+                    <div class = "postSubMenuOptionContent">
+                        <i class="fa-solid fa-trash-can"></i>
+                        <p> Delete Post </p>
+                    </div>    
+                </div>
+            </div>
+            
+            
+
             <p id="caption">${caption_}</p>
             <img class="postPhoto" src="${imageUrl}" alt="">
             <div class="post-action-bar">
@@ -470,6 +519,43 @@ async function displayPost(imageUrl) {
 
 
     feed.appendChild(postDiv);
+
+
+const subMenuButton = postDiv.querySelector(".openOptionsButton");
+const subMenu = postDiv.querySelector(".postSubMenu");
+const userSubMenu = postDiv.querySelector(".userPostSubMenu");
+let subMenuVisible = false;
+
+const isOwner = parseInt(postUserId) === parseInt(userId);
+
+// Choose which menu to use
+const activeSubMenu = isOwner ? userSubMenu : subMenu;
+
+// Toggle menu on button click
+subMenuButton.onclick = function (event) {
+    event.stopPropagation(); // Prevent triggering document click
+    if (!subMenuVisible) {
+        activeSubMenu.style.display = 'flex';
+        subMenuVisible = true;
+    } else {
+        activeSubMenu.style.display = 'none';
+        subMenuVisible = false;
+    }
+};
+
+// Close submenu when clicking anywhere else
+document.addEventListener("click", function (event) {
+    const clickedInsideButton = subMenuButton.contains(event.target);
+    const clickedInsideMenu = activeSubMenu.contains(event.target);
+
+    if (!clickedInsideButton && !clickedInsideMenu) {
+        activeSubMenu.style.display = 'none';
+        subMenuVisible = false;
+    }
+});
+
+
+    
 
 
 

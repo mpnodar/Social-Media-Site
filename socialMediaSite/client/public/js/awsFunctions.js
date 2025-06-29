@@ -1,12 +1,12 @@
 
-require('dotenv').config();
+// require('dotenv').config();
 
 
 // AWS S3 Configuration
 AWS.config.update({
-  region: S3_REGION, 
-  accessKeyId: AWS_ACCESS_KEY_ID,
-  secretAccessKey: AWS_SECRET_ACCESS_KEY,
+  region: 'us-east-1', 
+  accessKeyId: 'AKIARZDBICPY42BQ26VD',
+  secretAccessKey: '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',
 });
 
 
@@ -46,7 +46,7 @@ function uploadFile(event) {
 
   // S3 upload parameters
   const params = {
-      Bucket: process.env.S3_BUCKET, // Bucket name
+      Bucket: 'aws-test-nodar', // Bucket name
       Key: file.name, // File name
       Body: file, // File content
       ContentType: file.type
@@ -73,7 +73,7 @@ function uploadFile(event) {
 
   const postData = {
       id: id,
-      image_url:  `https://aws-test-nodar.s3.us-east-1.amazonaws.com/'${fileName}`,
+      image_url:  `https://aws-test-nodar.s3.us-east-1.amazonaws.com/${fileName}`,
       caption: caption_
   };
   console.log("Post Data Being Sent:", postData);  // Debugging step
