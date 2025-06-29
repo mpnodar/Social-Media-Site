@@ -325,6 +325,7 @@ body {
     padding-top: 0px;
     background-color: #EDEDED;
     border-radius: 5px;
+    position: relative;
 }
 
 .post img {
@@ -340,8 +341,7 @@ body {
     padding-bottom: 10px;
     padding-top: 10px;
     height: auto;
-    position: relative; 
-    /* Testing Relative Position; change if necessary */
+    /* position: relative;  */
 }
 
 .post p {
@@ -981,6 +981,7 @@ padding-top: 20px;
     /* width: 20px; */
     padding: 10px;
     text-align: center;
+    background-color: blue;
 }
 
 .openOptionsButton:hover {
